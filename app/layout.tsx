@@ -1,27 +1,28 @@
-import React from 'react';
+import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import "./globals.css"
-import { ThemeProvider } from "next-themes"
+import { Providers } from "@/components/providers/toast-provider"
+import { NavBar } from "@/components/nav-bar"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Donor Data Cleaner",
-  description: "Clean and update your donor database with the latest information",
+  title: "Data Cleaner",
+  description: "Clean and update your donor contact information from CSV, Excel, JSON, or PDF files",
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        <Providers>
+          <NavBar />
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   )

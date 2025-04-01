@@ -18,7 +18,7 @@ import React from "react"
 
 export default function DonorDataCleaner() {
   const router = useRouter()
-  const [currentStep, setCurrentStep] = useState<"upload" | "preview" | "cleaning" | "results">("upload")
+  const [currentStep, setCurrentStep] = useState<"upload" | "cleaning" | "results">("upload")
   const [progress, setProgress] = useState(0)
   const [fileUploaded, setFileUploaded] = useState(false)
   const [cleaningStarted, setCleaningStarted] = useState(false)
@@ -32,7 +32,7 @@ export default function DonorDataCleaner() {
     if (files && files.length > 0) {
       // In a real app, you would parse the file here
       setFileUploaded(true)
-      setCurrentStep("preview")
+      setCurrentStep("cleaning")
 
       // Mock data for demonstration
       setDonorData([
@@ -184,13 +184,6 @@ export default function DonorDataCleaner() {
               Upload
             </Badge>
             <Badge
-              variant={currentStep === "preview" ? "default" : "outline"}
-              className="cursor-pointer"
-              onClick={() => router.push("/preview")}
-            >
-              Preview
-            </Badge>
-            <Badge
               variant={currentStep === "cleaning" ? "default" : "outline"}
               className="cursor-pointer"
               onClick={() => router.push("/cleaning")}
@@ -216,7 +209,7 @@ export default function DonorDataCleaner() {
                 <Info className="h-4 w-4" />
                 <AlertTitle>Supported formats</AlertTitle>
                 <AlertDescription>
-                  You can upload CSV, Excel (.xlsx), or JSON files containing your donor information.
+                  You can upload CSV, Excel (.xlsx), JSON, or PDF files containing your donor information.
                 </AlertDescription>
               </Alert>
 
@@ -236,68 +229,6 @@ export default function DonorDataCleaner() {
                     <FileUp className="mr-2 h-4 w-4" />
                     Select File
                   </Button>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="preview" className="mt-0 space-y-4">
-            <Alert>
-              <Info className="h-4 w-4" />
-              <AlertTitle>Data Preview</AlertTitle>
-              <AlertDescription>
-                Review your donor data before starting the cleaning process. We've detected {donorData.length} records.
-              </AlertDescription>
-            </Alert>
-
-            <ScrollArea className="h-[350px] rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>Last Donation</TableHead>
-                    <TableHead>Estimated Worth</TableHead>
-                    <TableHead>Last Updated</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {donorData.map((donor) => (
-                    <TableRow key={donor.id}>
-                      <TableCell className="font-medium">{donor.name}</TableCell>
-                      <TableCell>{donor.email}</TableCell>
-                      <TableCell>{donor.phone}</TableCell>
-                      <TableCell>{donor.lastDonation}</TableCell>
-                      <TableCell>{donor.estimatedWorth}</TableCell>
-                      <TableCell>{donor.lastUpdated}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </ScrollArea>
-
-            <div className="space-y-4">
-              <Separator />
-              <div className="space-y-4">
-                <h3 className="font-medium text-lg">Cleaning Options</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center space-x-2">
-                    <Switch id="contact-info" defaultChecked />
-                    <Label htmlFor="contact-info">Update contact information</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch id="financial" defaultChecked />
-                    <Label htmlFor="financial">Research financial background</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch id="social" defaultChecked />
-                    <Label htmlFor="social">Find social media profiles</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch id="employment" defaultChecked />
-                    <Label htmlFor="employment">Update employment information</Label>
-                  </div>
                 </div>
               </div>
             </div>
@@ -470,14 +401,7 @@ export default function DonorDataCleaner() {
         </Button>
 
         {currentStep === "upload" && (
-          <Button disabled={!fileUploaded} onClick={() => router.push("/preview")}>
-            Next
-          </Button>
-        )}
-
-        {currentStep === "preview" && (
-          <Button onClick={() => router.push("/cleaning")}>
-            <RefreshCw className="mr-2 h-4 w-4" />
+          <Button disabled={!fileUploaded} onClick={() => router.push("/cleaning")}>
             Start Cleaning
           </Button>
         )}
